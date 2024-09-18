@@ -1,12 +1,14 @@
 import { Text, View } from "react-native";
 import { formatSum } from "../utils/formatSum";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ProgressLimit = ({ used, limit, page }) => {
     const [finish, setFinish] = useState(false);
     const [residual, setResidual] = useState(0);
     const [residualProgress, setResidualProgress] = useState(0);
     const [usedProgress, setUsedProgress] = useState(0);
+    const { t } = useTranslation()
 
     useEffect(() => {
         const resi = limit - used;
@@ -30,10 +32,10 @@ const ProgressLimit = ({ used, limit, page }) => {
                 <View className={' w-10/12 '}>
                     <View className={'flex flex-row'}>
                         <View className={'flex-1 h-5  w-6/12'}>
-                            <Text className={'text-11 text-gray'}>Использовано</Text>
+                            <Text className={'text-11 text-gray'}> {t('used')} </Text>
                         </View>
                         <View className={'flex-1 h-5  w-6/12 items-end'}>
-                            <Text className={'text-11 text-gray '}>Можно потратить</Text>
+                            <Text className={'text-11 text-gray '}> {t('spend_it')} </Text>
                         </View>
                     </View>
                     <View className={'flex flex-row'}>

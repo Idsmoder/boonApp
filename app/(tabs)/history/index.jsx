@@ -268,12 +268,6 @@ const History = () => {
 							onPress={() => router.push(`/product/${item.id}`)}
 						>
 							<ItemProduct page={'home'} prop={item} />
-							{/* <View>
-								<Text className={'text-md first-letter:capitalize text-slate-700'}>{item.title}</Text>
-								<Text className={'text-sm first-letter:capitalize text-slate-400'}>{item.device}</Text>
-								<Text className={'text-md first-letter:capitalize text-slate-700'}>{formatSum(String(item.price))} <Text className='text-slate-400 uppercase'>UZS</Text> </Text>
-							</View>
-							<MaterialIcons name={'navigate-next'} size={28} color={'gray'} /> */}
 						</TouchableOpacity>
 					)}
 					stickySectionHeadersEnabled={true}

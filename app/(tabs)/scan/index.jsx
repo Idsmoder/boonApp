@@ -1,29 +1,28 @@
-import { View, Text, Button, StatusBar, StyleSheet, Linking, AppState } from "react-native";
+import { View, Text, Button, StyleSheet, AppState } from "react-native";
 import { Camera, CameraView, useCameraPermissions } from "expo-camera";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { requestCameraPermissionsAsync } from "expo-camera/legacy";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useFocusEffect } from "@react-navigation/native";
-import api from "../../../api/api";
+import extractDynamicPart from "../../../utils/extractDynamicPart";
+import { router } from "expo-router";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 export default function Scan() {
     const [hasPermission, setHasPermission] = useCameraPermissions();
     const qrLock = useRef(false)
     const appState = useRef(AppState.currentState)
     const successCode = async (barcode) => {
-        qrLock.current = false
-        // console.log('barcode', JSON.stringify(barcode, null, 2));
-        try {
-            const result = await api(`/application/product_parse`, {
-                data: {
-                    product_url: barcode?.data,
-                    task_id: 1,
-                },
-                method: "POST"
-            })
-            console.log('parsed product', JSON.stringify(result.data, null, 2));
-        } catch (error) {
-            console.log(error);
+        if (barcode.data && extractDynamicPart(barcode.data)) {
+            router.push(`/product/${extractDynamicPart(barcode.data)}==true`)
+        }
+        else {
+            showMessage({
+                message: 'Failed to scan, show another qr code',
+                type: "danger",
+                duration: 3000,
+                style: { top: 30 }
+            });
+
         }
     }
     useEffect(() => {
@@ -51,13 +50,6 @@ export default function Scan() {
         </View>
     }
     if (!hasPermission.granted) {
-        useFocusEffect(
-            useCallback(() => {
-                StatusBar.setBarStyle('default');
-                return () => {
-                    StatusBar.setBarStyle('dark-content');
-                };
-            }, []))
         return (
             <View style={styles.container} >
                 <Text style={styles.cameraText}>Для сканирования QR кода необходимо разрешение на использование камеры</Text>
@@ -67,16 +59,16 @@ export default function Scan() {
     }
     return (
         <SafeAreaView>
+            <FlashMessage position="top" />
             <CameraView
                 facing="back"
                 onBarcodeScanned={(barcode) => {
                     if (barcode && !qrLock.current) {
                         qrLock.current = true;
+                        successCode(barcode)
                         setTimeout(async () => {
                             qrLock.current = false;
-                            await Linking.openURL(barcode.data);
-                            successCode(barcode)
-                        }, 500);
+                        }, 1000);
                     }
                 }}
                 className={'w-full, h-full'}
@@ -97,5 +89,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         lineHeight: 25
     },
-
 })

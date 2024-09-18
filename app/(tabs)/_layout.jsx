@@ -1,8 +1,6 @@
 import { Tabs } from "expo-router";
 import { FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Platform, TouchableOpacity, View } from "react-native";
-
 
 export default () => {
 	const platform = Platform.OS;
@@ -11,11 +9,9 @@ export default () => {
 			tabBarStyle: {
 				backgroundColor: 'white',
 				height: platform === 'ios' ? 90 : 60,
-
 				borderTopWidth: 0,
 				borderTopColor: 'transparent',
 				shadowColor: "#000",
-
 				shadowOpacity: 0,
 				shadowRadius: 0,
 				elevation: 0,
@@ -44,7 +40,7 @@ export default () => {
 			),
 			tabBarShowLabel: false
 		}} />
-		<Tabs.Screen name="history" options={{
+		<Tabs.Screen name='history' options={{
 			headerShown: false,
 			tabBarIcon: ({ color }) => <Ionicons name="clipboard" size={22} color={color} />,
 			tabBarShowLabel: false

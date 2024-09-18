@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { Image, ScrollView, TextInput, RadioNodeList, Text, View, Pressable } from 'react-native'
 import Button from '../../components/Button'
 import { formatSum } from '../../utils/formatSum'
+import { useTranslation } from 'react-i18next'
 const Order = () => {
+  const { t } = useTranslation()
   const homeImg = require('../../assets/order/home.png');
   const office = require('../../assets/order/bag.png');
   const [radioBtn, setRadioBtn] = useState(0)
@@ -21,8 +23,8 @@ const Order = () => {
   ]
 
   const radioData = [
-    { label: 'Доставка до дома', img: homeImg },
-    { label: 'Самовывоз с пункта выдачи ', img: office },
+    { label: t('delivery'), img: homeImg },
+    { label: t('pick_up_point'), img: office },
   ]
 
   const cardData = [
@@ -33,7 +35,7 @@ const Order = () => {
       id: 2, cardNumber: "4111111111111111", cardType: "mastercard",
     },
     {
-      id: 4, cardNumber: "Наличными при получении", cardType: "cash",
+      id: 4, cardNumber: t('cash'), cardType: "cash",
     }
   ]
 
@@ -64,18 +66,18 @@ const Order = () => {
         </View>
 
         <Text className='text-17 font-medium my-5' >
-          Адрес доставки
+          {t('delivery_address')}
         </Text>
         <View>
           <Text className='text-11 font-medium mb-1' >
-            Адрес
+            {t('address')}
           </Text>
           <TextInput placeholder='0000 0000 0000 0000' inputMode='numeric' className='bg-white mb-3 py-2 px-3 border-slate-200 border rounded-lg' />
         </View>
         <View className='flex flex-row flex-wrap justify-between'>
           <View className='w-[48%]'>
             <Text className='text-11 font-medium mb-1' >
-              Дом
+              {t('house')}
             </Text>
             <TextInput inputMode='numeric' className='bg-white mb-3 py-2 px-3 border-slate-200 border rounded-lg' />
           </View>
@@ -83,7 +85,7 @@ const Order = () => {
             radioBtn === 0 ?
               <View className='w-[48%]'>
                 <Text className='text-11 font-medium mb-1' >
-                  Квартира
+                  {t('apartment')}
                 </Text>
                 <TextInput inputMode='numeric' className='bg-white mb-3 py-2 px-3 border-slate-200 border rounded-lg' />
               </View>
@@ -91,7 +93,7 @@ const Order = () => {
           }
           <View className='w-[48%]'>
             <Text className='text-11 font-medium mb-1' >
-              Подъезд
+              {t('entrance')}
             </Text>
             <TextInput inputMode='numeric' className='bg-white mb-3 py-2 px-3 border-slate-200 border rounded-lg' />
           </View>
@@ -99,7 +101,7 @@ const Order = () => {
             radioBtn === 0 ?
               <View className='w-[48%]'>
                 <Text className='text-11 font-medium mb-1' >
-                  Этаж
+                  {t('floor')}
                 </Text>
                 <TextInput inputMode='numeric' className='bg-white mb-3 py-2 px-3 border-slate-200 border rounded-lg' />
               </View> : null
@@ -107,13 +109,18 @@ const Order = () => {
         </View>
         <View>
           <Text className='text-11 font-medium mb-1'>
-            Комментарий для курьера
+            {t('comment')}
           </Text>
-          <TextInput placeholder='Комментарий' inputMode='text' className='bg-white mb-3 py-2 px-3 border-slate-200 border rounded-lg' />
+          <TextInput
+            multiline={true}
+            numberOfLines={3} placeholder={t('comment')} inputMode='text'
+            style={{ textAlignVertical: 'top', textAlign: 'left', resize: 'none' }}
+            className='bg-white mb-3 py-2 px-3 border-slate-200 border rounded-lg'
+          />
         </View>
         <View className='mb-10' >
           <Text className='text-17 mb-4' >
-            Способ оплаты
+            {t('payment_methods')}
           </Text>
           {
             cardData.map((item, index) => {
@@ -146,21 +153,21 @@ const Order = () => {
       <View className='bg-white  px-5 py-7 rounded-t-3xl ' >
         <View className='flex justify-between items-center flex-row border-b border-b-slate-400 mb-3 pb-3' >
           <Text className='text-14 font-medium text-slate-500' >
-            Всего :
+            {t('every')}:
           </Text>
           <Text className='text-15 font-medium' >
-            8 продукта
+            8 {t('goods')}
           </Text>
         </View>
         <View className='flex justify-between items-center flex-row mb-5' >
           <Text className='text-15 font-medium text-slate-500' >
-            Итого:
+            {t('total')}:
           </Text>
           <Text className='text-15 font-medium' >
-            {formatSum('111530000')} <Text className='text-slate-500'> UZS</Text>
+            {formatSum('111530000')} <Text className='text-slate-500'> {t('Uzs')} </Text>
           </Text>
         </View>
-        <Button text={'Оформить заказ'} />
+        <Button text={t('an_order')} />
       </View>
     </View>
   )

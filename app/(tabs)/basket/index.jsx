@@ -6,8 +6,10 @@ import { Entypo } from "@expo/vector-icons";
 import { formatSum } from "../../../utils/formatSum";
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const Basket = () => {
+    const { t } = useTranslation()
 
     const { basket } = useSelector(state => state.ProductSlicer)
     const platform = Platform.OS;
@@ -18,11 +20,11 @@ const Basket = () => {
             <View className={' justify-start items-start w-11/12 flex-1 py-2 '}>
                 <View className={' flex flex-row'}>
                     <View>
-                        <Text className={'text-black text-17 font-bold'}>Корзина </Text>
+                        <Text className={'text-black text-17 font-bold'}> {t('basket')} </Text>
                     </View>
                     <View className={'mt-1 -ml-2 flex flex-row'}>
                         <Entypo name={'dot-single'} size={16} color={'gray'} />
-                        <Text className={'text-gray -mt-0.5 -ml-1  text-13'}>{basket.length} товара</Text>
+                        <Text className={'text-gray -mt-0.5 -ml-1  text-13'}>{basket.length} {t('goods')}</Text>
                     </View>
                 </View>
                 {basket.length === 0 &&
@@ -49,12 +51,12 @@ const Basket = () => {
             }>
                 <View className={'flex flex-row  m-3'}>
                     <View className={'flex-1'}>
-                        <Text className={'text-15 text-gray'}>Итого:</Text>
+                        <Text className={'text-15 text-gray'}>{t('total')}:</Text>
                     </View>
                     <View className={'flex-1 items-end'}>
                         <View className={'flex flex-row'}>
                             <Text className={'text-15 text-black font-bold'}>{formatSum(basket.reduce((a, b) => a + parseFloat(b?.sale_price), 0))}</Text>
-                            <Text className={'ml-1 text-gray'}>UZS</Text>
+                            <Text className={'ml-1 text-gray'}>{t('Uzs')} </Text>
                         </View>
 
                     </View>
@@ -62,7 +64,7 @@ const Basket = () => {
                 <View className={'flex flex-row  h-20 m-3 '}>
                     <View className={'flex-1'}>
                         <View className={'rounded-lg bg-btn-primary p-3 items-center'} onTouchStart={() => router.push('order/Order')} >
-                            <Text className={'text-white text-15'}>Перейти к оформлению</Text>
+                            <Text className={'text-white text-15'}> {t('proceed_to_checkout')} </Text>
                         </View>
                     </View>
                 </View>
