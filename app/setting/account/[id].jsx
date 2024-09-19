@@ -4,8 +4,10 @@ import { Entypo } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { TextInputMask } from "react-native-masked-text";
+import { useTranslation } from "react-i18next";
 
 const Account = () => {
+    const {t} = useTranslation()
     const [image, setImage] = useState(null);
     const [account, setAccount] = useState({
         name: 'John',
@@ -14,7 +16,6 @@ const Account = () => {
         image: 'https://randomuser.me/api/portraits/men/75.jpg'
     })
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
@@ -42,11 +43,11 @@ const Account = () => {
             </TouchableOpacity>
             <View className={'mt-10  justify-center items-center w-full'}>
                 <View className={' w-11/12'}>
-                    <Text className={'text-17'}> Основные данные</Text>
+                    <Text className={'text-17'}> {t('basic_data')} </Text>
                 </View>
                 <View className={'w-11/12 pt-5 '}>
                     <View>
-                        <Text className={'text-13'}>Имя</Text>
+                        <Text className={'text-13'}> {t('name')} </Text>
                     </View>
                     <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                         <TextInput
@@ -59,7 +60,7 @@ const Account = () => {
                 </View>
                 <View className={'w-11/12 pt-3 '}>
                     <View>
-                        <Text className={'text-13'}>Фамилия</Text>
+                        <Text className={'text-13'}> {t('surname')} </Text>
                     </View>
                     <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                         <TextInput
@@ -72,7 +73,7 @@ const Account = () => {
                 </View>
                 <View className={'w-11/12 pt-3 '}>
                     <View>
-                        <Text className={'text-13'}>Телефон</Text>
+                        <Text className={'text-13'}> {t('phone')} </Text>
                     </View>
                     <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                         <TextInputMask
@@ -90,7 +91,7 @@ const Account = () => {
                 </View>
             </View>
             <View className={'h-12 rounded-lg bg-btn-primary justify-center absolute bottom-5  w-11/12'}>
-                <Text className={'text-center text-white'}>Сохранить данные</Text>
+                <Text className={'text-center text-white'}> {t('save_data')} </Text>
             </View>
 
         </View>

@@ -3,9 +3,11 @@ import { Entypo, Ionicons } from "@expo/vector-icons";
 import { TextInputMask } from "react-native-masked-text";
 import formatPhone from "../../../utils/formatPhone";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Security = () => {
     const password = '123456'
+    const { t } = useTranslation()
     const [showPasswordOld, setShowPasswordOld] = useState(true)
     const [showPasswordNew, setShowPasswordNew] = useState(true)
     const [showPasswordRepeat, setShowPasswordRepeat] = useState(true)
@@ -15,14 +17,13 @@ const Security = () => {
             className={'flex-1 bg-bg-default'}
         >
             <View className={'flex justify-start items-center  bg-bg-default h-full '}>
-
                 <View className={'mt-5  justify-center items-center w-full '}>
                     <View className={' w-11/12'}>
-                        <Text className={'text-17'}> Обновление пароля</Text>
+                        <Text className={'text-17'}> {t('update_password')} </Text>
                     </View>
                     <View className={'w-11/12 pt-5 '}>
                         <View>
-                            <Text className={'text-13'}>Старый пароль</Text>
+                            <Text className={'text-13'}> {t('old_password')} </Text>
                         </View>
                         <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                             <TextInput
@@ -38,7 +39,7 @@ const Security = () => {
                     </View>
                     <View className={'w-11/12 pt-5 '}>
                         <View>
-                            <Text className={'text-13'}>Новый пароль</Text>
+                            <Text className={'text-13'}> {t('new_password')} </Text>
                         </View>
                         <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                             <TextInput
@@ -54,7 +55,7 @@ const Security = () => {
                     </View>
                     <View className={'w-11/12 pt-5 '}>
                         <View>
-                            <Text className={'text-13'}>Повторите новый пароль</Text>
+                            <Text className={'text-13'}> {t('repeat_new_password')} </Text>
                         </View>
                         <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                             <TextInput

@@ -1,11 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { View, Text, ScrollView, Image, ImageBackground, Pressable } from "react-native";
 import { useSelector } from "react-redux";
 
 const Payments = () => {
     const navigation = useNavigation()
+    const { t } = useTranslation()
     const { card } = useSelector(state => state.CardSlicer)
     const bg_backg = require("../../../assets/cards/card_background.png")
     const cardImg = [
@@ -44,7 +46,7 @@ const Payments = () => {
         <ScrollView className={'bg-bg-default h-full'}>
             <View className='px-5 ' >
                 <View>
-                    <Text className='font-normal text-lg mb-3'>Информация о вашей карте</Text>
+                    <Text className='font-normal text-lg mb-3'> {t('info_your_card')} </Text>
                     <Pressable
                         onPress={() => router.push(`/setting/addCard/add`)}
                     >

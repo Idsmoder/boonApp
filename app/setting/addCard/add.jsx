@@ -10,8 +10,10 @@ import { TextInputMask } from 'react-native-masked-text';
 import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import api from '../../../api/api';
+import { useTranslation } from 'react-i18next';
 function AddCard() {
   const navigation = useNavigation();
+  const { t } = useTranslation()
   const [isLoading, setLoading] = useState(false)
   const { card } = useSelector(state => state.CardSlicer)
   const [isActiveTheme, setIsActiveTheme] = useState(0)
@@ -33,7 +35,7 @@ function AddCard() {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: card ? "Редактировать карта" : "Добавить карта",
+      headerTitle: card ? t('edit_card') : t('add_card'),
     });
   }, [navigation, card]);
 
@@ -69,15 +71,15 @@ function AddCard() {
   }
   return (
     <View className='flex flex-col items-stretch justify-between px-5 py-2 bg-bg-default h-full'>
-      <FlashMessage position="top" />
+      <FlashMessage position="top" duration={3000} />
       <ScrollView>
         <Text className='text-17 text-[#171717]'>
-          Данные карты
+          {t('card_details')}
         </Text>
         <View className='my-4' >
           <View>
             <Text className='text-11 mb-1' >
-              Номер карты
+              {t('card_number')}
             </Text>
             <View>
               <TextInputMask
@@ -103,7 +105,7 @@ function AddCard() {
           </View>
           <View>
             <Text className='text-11 mb-1' >
-              Срок действия карты
+              {t('card_validity_period')}
             </Text>
             <View>
               <TextInputMask
@@ -129,7 +131,7 @@ function AddCard() {
           </View>
           <View>
             <Text className='text-11 mb-1' >
-              Название карты
+              {t('card_name')}
             </Text>
             <View>
               <TextInputMask
@@ -155,7 +157,7 @@ function AddCard() {
           </View>
           <View>
             <Text className='text-17 my-3'>
-              Внешний вид
+              {t('appearance')}
             </Text>
             <View className='items-center gap-1 flex-row flex' >
               {
@@ -170,7 +172,7 @@ function AddCard() {
         </View>
       </ScrollView>
       <View>
-        <Button handle={submitCardinfo} text={card ? "Редактировать карта" : "Добавить карта"} loading={isLoading} />
+        <Button handle={submitCardinfo} text={card ? t('edit_card') : t('add_card')} loading={isLoading} />
       </View>
     </View>
   )

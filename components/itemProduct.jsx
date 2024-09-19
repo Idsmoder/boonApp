@@ -2,19 +2,21 @@ import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { formatSum } from "../utils/formatSum";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 const ItemProduct = ({ prop, page }) => {
+    const { t } = useTranslation()
     const deleteProduct = () => {
         Alert.alert(
-            "Удаление товара",
-            "Вы уверены, что хотите удалить товар?",
+            t('removing_product'),
+            t('product_delete_question'),
             [
                 {
-                    text: "Отмена",
+                    text: t('cancel'),
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel"
                 },
-                { text: "Удалить", onPress: () => console.log("OK Pressed") }
+                { text: t('delete'), onPress: () => console.log("OK Pressed") }
             ]
         );
     }
@@ -30,12 +32,12 @@ const ItemProduct = ({ prop, page }) => {
                     </View>
                     <View className={' pl-2 pt-2'}>
                         <View className={'flex flex-row'}>
-                            <Text className={'text-15 text-black'}>Purchase: {formatSum(prop?.purchase_price)}</Text>
-                            <Text className={'text-15 text-gray'}> UZS</Text>
+                            <Text className={'text-15 text-black'}> {t('purchase')}: {formatSum(prop?.purchase_price)}</Text>
+                            <Text className={'text-15 text-gray'}> {t('Uzs')} </Text>
                         </View>
                         <View className={'flex flex-row'}>
-                            <Text className={'text-15'}>Sale price: {formatSum(prop?.sale_price)}</Text>
-                            <Text className={'text-15 text-gray'}> UZS  </Text>
+                            <Text className={'text-15'}> {t('sale_price')}: {formatSum(prop?.sale_price)}</Text>
+                            <Text className={'text-15 text-gray'}> {t('Uzs')} </Text>
                         </View>
                     </View>
                 </View>
