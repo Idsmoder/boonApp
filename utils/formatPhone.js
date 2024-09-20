@@ -6,5 +6,5 @@ export default function formatPhone(phone) {
 }
 
 export function cleanPhoneNumber(phoneNumber) {
-    return phoneNumber.replace(/[\s()+-]/g, '');
+    return phoneNumber.replace(/[\s()+-]/g, '').slice(3);
 }

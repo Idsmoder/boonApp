@@ -1,23 +1,35 @@
-import { Image, ScrollView, SectionList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, SectionList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { URL } from "../../api/const";
+import { useContext, useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../api/api";
+import createDashedLine from "../../utils/createDashedLine";
+import ImageView from "react-native-image-viewing";
+import { useTranslation } from "react-i18next";
+import themeContext from "../../theme/themeContext";
 const id = () => {
+	const Th = useContext(themeContext)
 	const [isLoading, setLoading] = useState(false)
-
+	const [visible, setIsVisible] = useState(false);
 	const [singleInfo, setSingleInfo] = useState(null)
 	const { params } = useRoute();
-
+	const { t } = useTranslation()
+	const link = "https://gateway.texnomart.uz/api/common/v1/stock/product-characters?unique_id="
 	const getSingleProduct = async () => {
 		setLoading(true)
-		if (params.id) {
+		const _id = params.id?.split('==')[0];
+		const show = params.id?.split('==')[1];
+		if (_id) {
 			try {
-				const res = await api(`application/product_info/${params?.id}`);
-				// console.log('single prod`uct', JSON.stringify(res.data, null, 2));
-				setSingleInfo(res.data)
+				if (show) {
+					const res = await api(`${link}${_id}`);
+					setSingleInfo(res.data?.data?.data)
+				}
+				else {
+					const res = await api(`/application/product_info/${_id}`);
+					setSingleInfo(res.data?.info)
+				}
 			} catch (error) {
 				console.log(error);
 			}
@@ -33,53 +45,67 @@ const id = () => {
 	if (isLoading) {
 		return <Loading loading={isLoading} />
 	}
-	let sections = singleInfo?.info.map(section => ({
+	sections = singleInfo?.map(section => ({
 		title: section.name,
 		data: section.characters,
 	}));
 	return (
-		<SafeAreaView style={styles.container}>
+		<SafeAreaView style={[styles.container, { backgroundColor: Th.backgroundColor }]}>
 			{singleInfo ? (
 				<View style={styles.wrapper}>
-					<Text style={styles.headerText}>
+					<Text style={[styles.headerText, { color: Th.color }]}  >
 						{singleInfo?.name}
 					</Text>
-					<Image
-						source={{ uri: singleInfo?.image }}
-						style={{ margin: "auto" }}
-						onError={(error) => console.error('Rasm yuklanmadi', error)}
-						width={350}
-						height={150}
-						resizeMode='contain'
+					<ImageView
+						imageIndex={0}
+						visible={visible}
+						onRequestClose={() => setIsVisible(false)}
+						images={[{ uri: singleInfo?.image }]}
 					/>
+					{singleInfo?.image ?
+						<Pressable onPress={() => setIsVisible(true)} >
+							<Image
+								source={{ uri: singleInfo?.image }}
+								style={{ margin: "auto" }}
+								onError={(error) => console.error('Rasm yuklanmadi', error)}
+								width={300}
+								height={150}
+								resizeMode='contain'
+							/>
+						</Pressable>
+						: null}
 					<SectionList
 						sections={sections}
 						keyExtractor={(item, index) => item + index}
 						renderItem={({ item }) => (
 							<View style={styles.character}>
-								<Text style={styles.characterName}
+								<Text style={[styles.characterName, { color: Th.color }]}
 								>{item.name}: </Text>
-								<Text style={styles.characterValue}>{item.value}</Text>
+								<Text style={styles.characterName} >
+									{createDashedLine(item?.name, item.value, 45)}
+								</Text>
+								<Text style={[styles.characterValue, { color: Th.color }]}>{item.value}</Text>
 							</View>
 						)}
 						renderSectionHeader={({ section: { title } }) => (
-							<Text style={styles.sectionTitle}>{title}</Text>
+							<Text style={[styles.sectionTitle, { color: Th.color, backgroundColor: Th.backgroundColor }]} >{title}</Text>
 						)}
 						stickySectionHeadersEnabled={true}
 						contentContainerStyle={styles.scrollViewContent}
 					/>
 					<TouchableOpacity style={styles.button}>
-						<Text style={styles.buttonText}>Добавить в корзину</Text>
+						<Text style={[styles.buttonText, { color: Th.color }]}> {t('add_cart')} </Text>
 					</TouchableOpacity>
 				</View>
 			) : (
-				<View style={styles.emptyState}>
-					<Text style={styles.emptyStateText}>
-						Malumot topilmadi
+				<View style={[styles.emptyState, { backgroundColor: Th.backgroundColor }]} >
+					<Text style={[styles.emptyStateText, { color: Th.color }]}>
+						{t('no_data')}
 					</Text>
 				</View>
-			)}
-		</SafeAreaView>
+			)
+			}
+		</SafeAreaView >
 	)
 }
 export default id;
@@ -87,7 +113,6 @@ export default id;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "white"
 	},
 	wrapper: {
 		flex: 1,
@@ -98,12 +123,7 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		fontSize: 19,
-		textAlign: 'center',
-	},
-	image: {
-		width: '100%',
-		height: 150,
-		resizeMode: 'contain',
+		paddingHorizontal: 20,
 	},
 	section: {
 		marginVertical: 10,
@@ -111,14 +131,13 @@ const styles = StyleSheet.create({
 	sectionTitle: {
 		fontSize: 19,
 		fontWeight: 'bold',
-		color: 'black',
 		marginBottom: 5,
-		backgroundColor: "white"
 	},
 	character: {
 		flexDirection: 'row',
 		paddingVertical: 3,
 		flexWrap: "wrap",
+		justifyContent: "space-between"
 	},
 	characterName: {
 		fontSize: 13,

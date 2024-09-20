@@ -1,28 +1,29 @@
-import { View, Text, TouchableOpacity, Image, TextInput, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { Entypo, Ionicons } from "@expo/vector-icons";
-import { TextInputMask } from "react-native-masked-text";
-import formatPhone from "../../../utils/formatPhone";
-import { useState } from "react";
+import { View, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
+import themeContext from "../../../theme/themeContext";
 
 const Security = () => {
-    const password = '123456'
+    const { t } = useTranslation()
     const [showPasswordOld, setShowPasswordOld] = useState(true)
     const [showPasswordNew, setShowPasswordNew] = useState(true)
     const [showPasswordRepeat, setShowPasswordRepeat] = useState(true)
+    const Th = useContext(themeContext)
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            className={'flex-1 bg-bg-default'}
+            className={'flex-1'}
+            style={{ backgroundColor: Th.backgroundColor }}
         >
-            <View className={'flex justify-start items-center  bg-bg-default h-full '}>
-
+            <View className={'flex justify-start items-center h-full'} style={{ backgroundColor: Th.backgroundColor }} >
                 <View className={'mt-5  justify-center items-center w-full '}>
                     <View className={' w-11/12'}>
-                        <Text className={'text-17'}> Обновление пароля</Text>
+                        <Text className={'text-17'} style={{ color: Th.color }}> {t('update_password')} </Text>
                     </View>
                     <View className={'w-11/12 pt-5 '}>
                         <View>
-                            <Text className={'text-13'}>Старый пароль</Text>
+                            <Text className={'text-13'} style={{ color: Th.color }}> {t('old_password')} </Text>
                         </View>
                         <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                             <TextInput
@@ -38,7 +39,7 @@ const Security = () => {
                     </View>
                     <View className={'w-11/12 pt-5 '}>
                         <View>
-                            <Text className={'text-13'}>Новый пароль</Text>
+                            <Text className={'text-13'} style={{ color: Th.color }}> {t('new_password')} </Text>
                         </View>
                         <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                             <TextInput
@@ -54,7 +55,7 @@ const Security = () => {
                     </View>
                     <View className={'w-11/12 pt-5 '}>
                         <View>
-                            <Text className={'text-13'}>Повторите новый пароль</Text>
+                            <Text className={'text-13'} style={{ color: Th.color }}> {t('repeat_new_password')} </Text>
                         </View>
                         <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                             <TextInput
@@ -70,7 +71,7 @@ const Security = () => {
                     </View>
                 </View>
                 <View className={'h-12 rounded-lg bg-btn-primary justify-center absolute bottom-5  w-11/12'}>
-                    <Text className={'text-center text-white'}>Сохранить данные</Text>
+                    <Text className={'text-center text-white'}> {t('save_data')} </Text>
                 </View>
 
             </View>

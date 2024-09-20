@@ -1,96 +1,138 @@
-import { Image, Text, View } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Entypo } from "@expo/vector-icons";
+import { Image, Pressable, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useContext, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { changeLangue, getLanguage, getTheme, toggleTheme } from "../../../store/Slicers/SwitchState";
+import Loading from "../../../components/Loading";
+import themeContext from "../../../theme/themeContext";
 
 const Decor = () => {
-    const icons = [
-        require('../../../assets/icons/1.png'),
-        require('../../../assets/icons/2.png'),
-        require('../../../assets/icons/3.png'),
-        require('../../../assets/icons/4.png'),
-        require('../../../assets/icons/dark.png'),
-        require('../../../assets/icons/white.png'),
-        require('../../../assets/icons/ru.png'),
-        require('../../../assets/icons/uz.png'),
-    ]
-    return (
-        <View className={'flex justify-start h-full items-center bg-bg-default'}>
-            <View className={'mt-10 w-11/12 '}>
-                <View>
-                    <Text className={'text-17'}>Тема приложения</Text>
-                </View>
-                <View className={'w-full h-12  mt-4'}>
-                    <Text className={'text-13'}>Иконка приложения</Text>
-                </View>
-                <View className={'flex flex-row'}>
-                    <View className={'rounded-lg'}>
-                        <Image source={icons[0]} className={'w-16 h-16'} />
-                    </View>
-                    <View className={' ml-4  '}>
-                        <Image source={icons[1]} className={'w-16 h-16'} />
-                    </View>
-                    <View className={' ml-4'}>
-                        <Image source={icons[2]} className={'w-16 h-16'} />
-                    </View>
-                    <View className={' ml-4'}>
-                        <Image source={icons[3]} className={'w-16 h-16'} />
-                    </View>
-                </View>
-                <View className={'w-full h-12  mt-4'}>
-                    <Text className={'text-13'}>Цветовая схема</Text>
-                </View>
-                <View className={'flex flex-row'}>
-                    <View className={'justify-center items-center'}>
-                        <Image source={icons[4]} className={'w-16 h-28'} />
-                        <View className={'mt-2 items-center'}>
-                            <Text className={'text-13'}>Темная</Text>
-                            <View className={'mt-2'}>
-                                <Entypo name={'circle'} size={20} color={'gray'} />
-                            </View>
-                        </View>
-                    </View>
-                    <View className={'ml-4 rounded-lg justify-center items-center'}>
-                        <Image source={icons[5]} className={'w-16 h-28'} />
-                        <View className={'mt-2 items-center'}>
-                            <Text className={'text-13'}>Светлая</Text>
-                            <View className={'mt-2'}>
-                                <Entypo name={'circle'} size={20} color={'gray'} />
-                            </View>
-                        </View>
-                    </View>
-                </View>
-                <View className={'w-full h-12  mt-4'}>
-                    <Text className={'text-13'}>Языковая схема</Text>
-                </View>
+	const { theme, language, langLoad, themeLoad } = useSelector(state => state.SwitchState);
+	const dispatch = useDispatch()
+	const { t } = useTranslation();
+	const Th = useContext(themeContext)
+	useEffect(() => {
+		dispatch(getTheme());
+		dispatch(getLanguage())
+	}, [])
 
-                <View className={'border border-gray-200 flex flex-row rounded-lg   h-14  pl-1 bg-white mt-1'}>
-                    <View className={'ml-3 mt-3'}>
-                        <Image source={icons[6]} className={'w-8 h-8'} />
-                    </View>
-                    <View className={'ml-4 mt-4'}>
-                        <Text className={'text-15'}>Русский язык</Text>
-                    </View>
-                    <View className={'ml-40 mt-4'}>
-                        <Entypo name={'circle'} size={20} color={'gray'} />
-                    </View>
-                </View>
-                <View className={'border border-gray-200 flex flex-row rounded-lg   h-14  pl-1 bg-white mt-4'}>
-                    <View className={'ml-3 mt-3'}>
-                        <Image source={icons[7]} className={'w-8 h-8'} />
-                    </View>
-                    <View className={'ml-4 mt-4'}>
-                        <Text className={'text-15'}>O’zbek tili</Text>
-                    </View>
-                    <View className={'ml-48  pt-4 items-center rounded-full'}>
-                        <Entypo name={'circle'} size={20} color={'gray'} />
-                    </View>
-                </View>
+	const icons = [
+		require('../../../assets/icons/1.png'),
+		require('../../../assets/icons/2.png'),
+		require('../../../assets/icons/3.png'),
+		require('../../../assets/icons/4.png'),
+	]
+	const langData = [
+		{
+			id: 1,
+			lang: "ru",
+			name: 'Русский язык',
+			icon: require('../../../assets/icons/ru.png')
+		},
+		{
+			id: 2,
+			lang: "uz",
+			name: "O`zbek tili",
+			icon: require('../../../assets/icons/uz.png'),
+		},
+	]
+	const themeData = [
+		{
+			id: 1,
+			name: 'dark',
+			bg: require('../../../assets/icons/dark.png'),
+		},
+		{
+			id: 2,
+			name: 'light',
+			bg: require('../../../assets/icons/white.png'),
+		},
+	]
+	return (
+		<View className={`flex justify-start h-full items-center bg-bg-default`} style={{backgroundColor: Th.backgroundColor}} >
+			<Loading loading={langLoad || themeLoad} />
+			<View className={'mt-7 w-11/12'}>
+				<View>
+					<Text style={{ color: Th.color }} className={'text-19'}>{t('theme_apk')}</Text>
+				</View>
+				<View className={'w-full my-4'}>
+					<Text style={{ color: Th.color }} className={'text-13'}>{t('icon_apk')}</Text>
+				</View>
+				<View className={'flex flex-row'}>
+					<View className={'rounded-lg'}>
+						<Image source={icons[0]} className={'w-16 h-16'} />
+					</View>
+					<View className={' ml-4  '}>
+						<Image source={icons[1]} className={'w-16 h-16'} />
+					</View>
+					<View className={' ml-4'}>
+						<Image source={icons[2]} className={'w-16 h-16'} />
+					</View>
+					<View className={' ml-4'}>
+						<Image source={icons[3]} className={'w-16 h-16'} />
+					</View>
+				</View>
+				<View className={'w-full my-4'}>
+					<Text style={{ color: Th.color }} className={'text-13'}> {t('color_scheme')} </Text>
+				</View>
+				<View className={'flex flex-row self-start gap-2'}  >
+					{
+						themeData.map((item) => {
+							return (
+								<Pressable className={'justify-center items-center'}
+									key={item.id}
+									onPress={() => {
+										dispatch(toggleTheme(item.name))
+										console.log(Th);
+									}}
+								>
+									<View className={`border  rounded-md overflow-hidden ${item.name === theme ? 'border-blue-400' : 'border-transparent'} `} >
+										<Image source={item.bg} className={'w-16 h-28'} resizeMode="cover" />
+									</View>
+									<View className={'mt-2 items-center'}>
+										<Text className={'text-13'} style={{ color: Th.color }} > {t(item.name)} </Text >
+										<View className={'mt-1'}>
+											<Ionicons size={22} name={item.name === theme ? "radio-button-on" : "radio-button-off"} color={item.name === theme ? "#007FFF" : "gray"} />
+										</View>
+									</View>
+								</Pressable>
+							)
+						})
+					}
+				</View>
+				<View className={'w-full my-4'}>
+					<Text className={'text-13'} style={{ color: Th.color }}> {t('lang_scheme')} </Text>
+				</View>
+				<View className='felx flex-col gap-2'>
+					{
+						langData.map((item) => (
+							<Pressable
+								onPress={() => {
+									dispatch(changeLangue(item.lang))
+								}}
+								key={item.id} className={'border border-gray-200 flex flex-row rounded-lg bg-white py-2 px-4 items-center justify-between'}>
+								<View className={'flex flex-row items-center gap-2'}>
+									<View>
+										<Image source={item.icon} className={'w-8 h-8'} />
+									</View>
+									<View>
+										<Text className={`text-15 ${item.lang === language ? 'font-medium tracking-wider' : ''} `}>{item.name}</Text>
+									</View>
+								</View>
+								<View>
+									<Ionicons size={22} name={item.lang === language ? "radio-button-on" : "radio-button-off"} color={item.lang === language ? "#007FFF" : "gray"} />
+								</View>
+							</Pressable>
+						))
+					}
+				</View>
+			</View>
+			<View className={'h-12 rounded-lg bg-btn-primary justify-center absolute bottom-5  w-11/12'}>
+				<Text className={'text-center text-white'}> {t('change_design')} </Text>
+			</View>
+		</View>
 
-            </View>
-            <View className={'h-12 rounded-lg bg-btn-primary justify-center absolute bottom-5  w-11/12'}>
-                <Text className={'text-center text-white'}>Изменить оформление</Text>
-            </View>
-        </View>
-    )
+	)
 }
 export default Decor;

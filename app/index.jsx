@@ -1,24 +1,25 @@
 import { View, StyleSheet, Text } from "react-native";
 import { useEffect, useState } from "react";
 import { Redirect, router, useNavigation } from "expo-router";
-import * as Secure from 'expo-secure-store';
-import LottieView from 'lottie-react-native';
-import initialRender from '../assets/loadingFirst.json'
-export default function Index() {
-  const [progress, setProgress] = useState(0);
-  const [token, setToken] = useState(null);
-  const navigation = useNavigation()
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from "expo-font";
+import { useDispatch, useSelector } from "react-redux";
+import { getToken } from "../store/Slicers/LoginSlicer";
+import { getTheme } from "../store/Slicers/SwitchState";
 
+export default function Index() {
+  const { access_token } = useSelector(state => state.LoginSlicer)
+  const [progress, setProgress] = useState(0);
+  const navigations = useNavigation()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    navigation.setOptions({
+    navigations.setOptions({
       title: "",
       headerShown: false,
-    });
-  }, [navigation])
-
-  useEffect(() => {
-    Secure.setItem('access_token', 'test');
+    })
+    dispatch(getToken())
+    dispatch(getTheme());
     const interval = setInterval(() => {
       setProgress((oldProgress) => {
         if (oldProgress === 100) {
@@ -32,23 +33,33 @@ export default function Index() {
   }, []);
   useEffect(() => {
     if (progress === 100) {
-      if (!token) {
-        router.push('home');
+      if (!access_token) {
+        router.replace('/login');
       } else {
-        router.push('home');
+        router.replace('/home');
       }
     }
+  }, [progress, access_token, router]);
+  const [loaded, error] = useFonts({
+    "syne": require('../assets/fonts/Syne-Bold.ttf'),
+  })
 
-  }, [progress, token, router]);
+  SplashScreen.preventAutoHideAsync();
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
-      <LottieView
-        source={initialRender}
-        autoPlay
-        loop
-        style={styles.animation}
-      />
+      <Text style={styles.boonText} >
+        Tehno {'\n'}BOON
+      </Text>
     </View>
   );
 }
@@ -58,9 +69,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: "#007FFF"
   },
-  animation: {
-    width: 200,
-    height: 200,
+  boonText: {
+    color: 'white',
+    fontSize: 50,
+    fontFamily: "syne",
+    lineHeight: 45,
   },
 });
