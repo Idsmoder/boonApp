@@ -9,5 +9,3 @@ export const setToken = async (token) => {
 export const removeToken = async () => {
     return await SecureStore.deleteItemAsync('access_token');
 }
-
-

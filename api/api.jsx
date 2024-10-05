@@ -1,6 +1,6 @@
 import axios from "axios";
-import { Token, URL } from "./const";
-
+import { URL } from "./const";
+import * as Secure from 'expo-secure-store';
 const api = axios.create({
   baseURL: URL,
   headers: {
@@ -9,7 +9,8 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    const Token = await Secure.getItemAsync('asccessToken');
     if (Token) {
       config.headers.Authorization = `Bearer ${Token}`;
     }

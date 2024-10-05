@@ -12,6 +12,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "hermes": {
+      "enabled": true,
+      "commandUnlink": "node node_modules/hermes-engine/unlink"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -32,6 +36,8 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      "@config-plugins/react-native-blob-util",
+      "@config-plugins/react-native-pdf",
       [
         "expo-camera",
         {
