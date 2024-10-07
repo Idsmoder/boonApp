@@ -11,7 +11,7 @@ const Loading = ({ loading }) => {
       >
         <View style={styles.modalBackground}>
           <View style={styles.activityIndicatorWrapper}>
-            <ActivityIndicator size="50" color="#00BFFF" />
+            <ActivityIndicator size="50" color="#007FFF" />
           </View>
         </View>
       </Modal>

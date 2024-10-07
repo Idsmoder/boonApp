@@ -4,7 +4,9 @@ import api from "../../api/api";
 export const getLimitData = createAsyncThunk('getLimitData', async () => {
   try {
     const res = await api(`/application/last`)
-    return res.data
+    const _id = res.data?.id;
+    const application = await api(`/application/get/${_id}`);
+    return { data: res.data, application: application?.data?.task }
   } catch (error) {
     return error
   }
@@ -97,8 +99,10 @@ const ProductSlicer = createSlice({
     ],
     isFetching: false,
     error: null,
-    limitData: [],
-    isLoading: false
+    limitData: {},
+    application: null,
+    isLoading: false,
+    chooseCardState: null
   },
   reducers: {
     setProducts(state, action) {
@@ -110,14 +114,22 @@ const ProductSlicer = createSlice({
     setError(state, action) {
       state.error = action.payload;
     },
+    handleChooseCard(state, action) {
+      const findItem = state?.limitData?.limit_list?.data.find(c => c.guidFinProduct === action.payload)
+      state.chooseCardState = findItem;
+      return state
+    }
   },
+
   extraReducers: (builder) => {
     builder.addCase(getLimitData.pending, (state) => {
       state.isLoading = true
     })
-    builder.addCase(getLimitData.fulfilled, (state, action) => {
+    builder.addCase(getLimitData.fulfilled, (state, { payload }) => {
       state.isLoading = false
-      state.limitData = action.payload
+      state.limitData = payload?.data
+      state.application = payload?.application
+      state.chooseCardState = payload?.data?.limit_list?.data.find(c => c.guidFinProduct === payload?.data?.guidFinProduct)
     })
     builder.addCase(getLimitData.rejected, (state, action) => {
       state.isLoading = false
@@ -126,6 +138,6 @@ const ProductSlicer = createSlice({
   }
 })
 
-export const { setProducts, setFetching, setError } = ProductSlicer.actions;
+export const { setProducts, setFetching, setError, handleChooseCard } = ProductSlicer.actions;
 
 export default ProductSlicer.reducer;

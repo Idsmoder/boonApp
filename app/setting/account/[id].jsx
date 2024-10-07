@@ -1,12 +1,16 @@
-import { Button, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import formatPhone from "../../../utils/formatPhone";
 import { Entypo } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { TextInputMask } from "react-native-masked-text";
+import { useTranslation } from "react-i18next";
+import themeContext from "../../../theme/themeContext";
+import Button from "../../../components/Button";
 
 const Account = () => {
-    const [image, setImage] = useState(null);
+    const { t } = useTranslation()
+    const Th = useContext(themeContext)
     const [account, setAccount] = useState({
         name: 'John',
         surname: 'Doe',
@@ -14,24 +18,23 @@ const Account = () => {
         image: 'https://randomuser.me/api/portraits/men/75.jpg'
     })
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         });
-        console.log('pickImage', result);
+        // console.log('pickImage', JSON.stringify(result, null, 2));
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            setAccount({ ...account, image: result.assets[0].uri });
         }
     };
     return (
-        <View className={'flex justify-start items-center bg-bg-default h-full'}>
+        <View className={'flex justify-start items-center h-full'} style={{ backgroundColor: Th.backgroundColor }} >
             <TouchableOpacity onPress={pickImage}>
-                <View className={'mt-10 justify-center items-center '}>
+                <View className={'mt-10 justify-center items-center'}>
                     <View>
-                        <Image source={require('../../../assets/profile/user.jpg')} className={'w-20 h-20 rounded-full'} />
+                        <Image source={{ uri: account.image }} className={'w-20 h-20 rounded-full'} />
                     </View>
                     <View className={'absolute'}>
                         <View className={'w-10  h-10  justify-center items-center bg-btn-primary rounded-full mt-10  ml-12'}>
@@ -40,13 +43,13 @@ const Account = () => {
                     </View>
                 </View>
             </TouchableOpacity>
-            <View className={'mt-10  justify-center items-center w-full'}>
-                <View className={' w-11/12'}>
-                    <Text className={'text-17'}> Основные данные</Text>
+            <View className={'mt-10 p-3 justify-center items-center w-full'}>
+                <View className={'w-full'}>
+                    <Text className={'text-17'} style={{ color: Th.color }}> {t('basic_data')} </Text>
                 </View>
-                <View className={'w-11/12 pt-5 '}>
+                <View className={'w-full pt-5 '}>
                     <View>
-                        <Text className={'text-13'}>Имя</Text>
+                        <Text className={'text-13'} style={{ color: Th.color }} > {t('name')} </Text>
                     </View>
                     <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                         <TextInput
@@ -57,9 +60,9 @@ const Account = () => {
                         />
                     </View>
                 </View>
-                <View className={'w-11/12 pt-3 '}>
+                <View className={'w-full pt-3 '}>
                     <View>
-                        <Text className={'text-13'}>Фамилия</Text>
+                        <Text className={'text-13'} style={{ color: Th.color }}> {t('surname')} </Text>
                     </View>
                     <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                         <TextInput
@@ -70,9 +73,9 @@ const Account = () => {
                         />
                     </View>
                 </View>
-                <View className={'w-11/12 pt-3 '}>
+                <View className={'w-full pt-3 '}>
                     <View>
-                        <Text className={'text-13'}>Телефон</Text>
+                        <Text className={'text-13'} style={{ color: Th.color }}> {t('phone')} </Text>
                     </View>
                     <View className={'border border-gray-200 rounded-lg w-full h-12 justify-center pl-1 bg-white mt-1'}>
                         <TextInputMask
@@ -89,8 +92,8 @@ const Account = () => {
                     </View>
                 </View>
             </View>
-            <View className={'h-12 rounded-lg bg-btn-primary justify-center absolute bottom-5  w-11/12'}>
-                <Text className={'text-center text-white'}>Сохранить данные</Text>
+            <View className={'absolute bottom-5 w-full px-3'}>
+                <Button className={'text-center text-white'} text={t('save_data')} />
             </View>
 
         </View>
